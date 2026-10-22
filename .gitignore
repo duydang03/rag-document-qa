@@ -18,7 +18,7 @@ venv/
 
 # Generated vector database
 data/chroma/
-
+data/documents/
 # Python test cache
 .pytest_cache/
 .coverage
