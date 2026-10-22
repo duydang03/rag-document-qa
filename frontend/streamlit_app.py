@@ -46,7 +46,26 @@ if "messages" not in st.session_state:
 if "current_document" not in st.session_state:
     st.session_state.current_document = None
 
+# ============================================================
+# CHECK WHETHER THE ANSWER IS A REFUSAL
+# ============================================================
 
+def is_refusal_answer(answer):
+    refusal_phrases = [
+        "tôi không biết dựa trên tài liệu được cung cấp",
+        "tôi không thể trả lời dựa trên tài liệu được cung cấp",
+        "i don't know based on the provided document",
+        "i cannot answer based on the provided document",
+        "i don't know based on the provided context",
+        "i cannot answer based on the provided context",
+    ]
+
+    normalized_answer = answer.strip().casefold()
+
+    return any(
+        phrase in normalized_answer
+        for phrase in refusal_phrases
+    )
 # ============================================================
 # 5. TITLE
 # ============================================================
@@ -203,25 +222,29 @@ if st.session_state.current_document:
 # ============================================================
 
 for message in st.session_state.messages:
-
     with st.chat_message(message["role"]):
-
         st.write(message["content"])
 
-        # Hiển thị sources nếu message là assistant
-        if (
-            message["role"] == "assistant"
-            and "sources" in message
-        ):
+        # Show which document was used for this message.
+        if message.get("document"):
+            st.caption(
+                f"Document: {message['document']}"
+            )
 
-            st.markdown("**Sources:**")
+        # Show sources only for answerable responses.
+        if message["role"] == "assistant":
+            answer = message["content"]
+            sources = message.get("sources", [])
 
-            for source in message["sources"]:
+            if sources and not is_refusal_answer(answer):
+                st.markdown("**Sources:**")
 
-                st.write(
-                    f"📄 {source['source']} "
-                    f"— Page {source['page']}"
-                )
+                for source in sources:
+                    st.write(
+                        f"📄 {source['source']} "
+                        f"— Page {source['page']}"
+                    )
+
 
 
 # ============================================================
@@ -230,168 +253,130 @@ for message in st.session_state.messages:
 
 prompt = st.chat_input(
     "Ask a question or attach a PDF...",
-    accept_file=True,
-    file_type=["pdf"]
+     accept_file=True,
+     file_type=["pdf"],
+     key="main_chat_input"
 )
-
 
 # ============================================================
 # 11. HANDLE USER INPUT
 # ============================================================
 
 if prompt:
+    
+# # ============================================================
+# # 10. CHAT INPUT + PDF UPLOAD
+# # ============================================================
 
-    uploaded_files = prompt.files
-    question = prompt.text.strip()
-
-
-    # ========================================================
-    # 11A. HANDLE PDF UPLOAD
-    # ========================================================
-
-    if uploaded_files:
-
-        uploaded_file = uploaded_files[0]
-
-        documents_folder = (
-            project_root / "data" / "documents"
-        )
-
-        documents_folder.mkdir(
-            parents=True,
-            exist_ok=True
-        )
-
-        file_path = (
-            documents_folder / uploaded_file.name
-        )
+#     prompt = st.chat_input(
+#     "Ask a question or attach a PDF...",
+#     accept_file=True,
+#     file_type=["pdf"],
+#     key="main_chat_input"
+# )
 
 
-        # ----------------------------------------------------
-        # Save PDF
-        # ----------------------------------------------------
+    # ============================================================
+    # 11. HANDLE USER INPUT
+    # ============================================================
 
-        with open(file_path, "wb") as file:
+    if prompt:
+        uploaded_files = prompt.files
+        question = (prompt.text or "").strip()
 
-            file.write(
-                uploaded_file.getbuffer()
-            )
+        # Default: use the document selected in the sidebar.
+        active_document = st.session_state.current_document
 
+        # --------------------------------------------------------
+        # 11A. HANDLE PDF UPLOAD
+        # --------------------------------------------------------
 
-        # ----------------------------------------------------
-        # Index PDF
-        # ----------------------------------------------------
+        if uploaded_files:
+            uploaded_file = uploaded_files[0]
 
-        with st.spinner(
-            f"Indexing {uploaded_file.name}..."
-        ):
+            documents_folder = project_root / "data" / "documents"
+            documents_folder.mkdir(parents=True, exist_ok=True)
 
-            pages, chunks = index_pdf(
-                str(file_path)
-            )
+            file_path = documents_folder / uploaded_file.name
 
+            # Save the uploaded PDF.
+            with open(file_path, "wb") as file:
+                file.write(uploaded_file.getbuffer())
 
-        # ----------------------------------------------------
-        # Set uploaded document as current document
-        # ----------------------------------------------------
+            # Index the uploaded PDF.
+            try:
+                with st.spinner(f"Indexing {uploaded_file.name}..."):
+                    pages, chunks = index_pdf(str(file_path))
 
-        st.session_state.current_document = (
-            uploaded_file.name
-        )
+                # Use the uploaded PDF for THIS question.
+                # Do not overwrite the sidebar selection.
+                active_document = uploaded_file.name
 
+                st.success(
+                    f"Document indexed: {pages} pages, {chunks} chunks."
+                )
 
-        st.success(
-            f"Document indexed successfully: "
-            f"{pages} pages, {chunks} chunks."
-        )
+            except Exception as e:
+                st.error(f"Could not index PDF: {e}")
+                st.stop()
 
+        # --------------------------------------------------------
+        # 11B. HANDLE QUESTION
+        # --------------------------------------------------------
 
-    # ========================================================
-    # 11B. HANDLE QUESTION
-    # ========================================================
+        if question:
+            if not active_document:
+                st.warning("Please upload or select a document first.")
 
-    if question:
-
-        # ----------------------------------------------------
-        # Check document
-        # ----------------------------------------------------
-
-        if st.session_state.current_document is None:
-
-            st.warning(
-                "Please upload or select a document first."
-            )
-
-        else:
-
-            # ------------------------------------------------
-            # Add user message
-            # ------------------------------------------------
-
-            st.session_state.messages.append(
-                {
+            else:
+                # Save the user message with its document.
+                st.session_state.messages.append({
                     "role": "user",
-                    "content": question
-                }
-            )
+                    "content": question,
+                    "document": active_document
+                })
 
+                with st.chat_message("user"):
+                    st.write(question)
+                    st.caption(f"Document: {active_document}")
 
-            # ------------------------------------------------
-            # Display user message
-            # ------------------------------------------------
+                # Generate answer using the explicitly selected source.
+                with st.chat_message("assistant"):
+                    with st.spinner(
+                        f"Searching {active_document}..."
+                    ):
+                        try:
+                            answer, sources = answer_question(
+                                question,
+                                source=active_document
+                            )
+                        except Exception as e:
+                            st.error(f"Could not answer the question: {e}")
+                            st.stop()
 
-            with st.chat_message("user"):
+                    st.write(answer)
 
-                st.write(question)
+                    st.caption(f"Document used: {active_document}")
 
+                    # Hide sources when the RAG system cannot answer.
+                    is_refusal = is_refusal_answer(answer)
 
-            # ------------------------------------------------
-            # Generate answer
-            # ------------------------------------------------
+                    # Do not save irrelevant sources for refusal answers.
+                    sources_to_save = [] if is_refusal else sources
 
-            with st.chat_message("assistant"):
+                    if sources_to_save:
+                        st.markdown("**Sources:**")
 
-                with st.spinner(
-                    "Searching the document..."
-                ):
+                        for source in sources_to_save:
+                            st.write(
+                                f"📄 {source['source']} "
+                                f"— Page {source['page']}"
+                            )
 
-                    answer, sources = answer_question(
-                        question,
-                        source=(
-                            st.session_state.current_document
-                        )
-                    )
-
-
-                # --------------------------------------------
-                # Display answer
-                # --------------------------------------------
-
-                st.write(answer)
-
-
-                # --------------------------------------------
-                # Display sources
-                # --------------------------------------------
-
-                st.markdown("**Sources:**")
-
-                for source in sources:
-
-                    st.write(
-                        f"📄 {source['source']} "
-                        f"— Page {source['page']}"
-                    )
-
-
-            # ------------------------------------------------
-            # Save assistant message
-            # ------------------------------------------------
-
-            st.session_state.messages.append(
-                {
+                # Save the answer with its document.
+                st.session_state.messages.append({
                     "role": "assistant",
                     "content": answer,
-                    "sources": sources
-                }
-            )
+                    "sources": sources_to_save,
+                    "document": active_document
+                })

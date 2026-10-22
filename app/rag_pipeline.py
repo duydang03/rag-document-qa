@@ -104,12 +104,12 @@ def answer_question(
 
     context = "\n\n---\n\n".join(context_parts)
 
-    if DEBUG:
-        print("\n" + "=" * 80)
-        print("DEBUG QUESTION:", question)
-        print("=" * 80)
-        print(context)
-        print("=" * 80 + "\n")
+    # if DEBUG:
+    #     # print("\n" + "=" * 80)
+    #     # print("DEBUG QUESTION:", question)
+    #     # print("=" * 80)
+    #     # print(context)
+    #     # print("=" * 80 + "\n")
 
     answer = generate_answer(context=context, question=question)
 
