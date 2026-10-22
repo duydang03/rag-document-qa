@@ -1,0 +1,36 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Virtual environment
+venv/
+.venv/
+
+# Secrets and environment variables
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# IDE
+.vscode/
+
+# Generated vector database
+data/chroma/
+
+# Python test cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary output files
+output*.txt
+
+# Generated test outputs and logs
+tests/reports/
+tests/results/
+tests/debug_output.txt
+tests/*_results.json
+tests/reranking_eval_*.json
+app/test

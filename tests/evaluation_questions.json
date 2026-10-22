@@ -1,0 +1,27 @@
+[
+    {
+        "question": "What is BDD100K?",
+        "document": "core.pdf",
+        "expected_page": 0
+    },
+    {
+        "question": "How many videos does BDD100K contain?",
+        "document": "core.pdf",
+        "expected_page": 0
+    },
+    {
+        "question": "How many tasks does BDD100K support?",
+        "document": "core.pdf",
+        "expected_page": 0
+    },
+    {
+        "question": "What type of dataset is BDD100K?",
+        "document": "core.pdf",
+        "expected_page": 0
+    },
+    {
+        "question": "What are some sources of diversity in the BDD100K dataset?",
+        "document": "core.pdf",
+        "expected_page": 0
+    }
+]

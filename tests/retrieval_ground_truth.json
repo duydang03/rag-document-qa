@@ -1,0 +1,62 @@
+[
+    {
+        "question": "What is BDD100K?",
+        "relevant_pages": [1]
+    },
+    {
+        "question": "How many videos does BDD100K contain?",
+        "relevant_pages": [1]
+    },
+    {
+        "question": "How many tasks does BDD100K support?",
+        "relevant_pages": [1]
+    },
+    {
+        "question": "What type of dataset is BDD100K?",
+        "relevant_pages": [1, 3]
+    },
+    {
+        "question": "What are some sources of diversity in the BDD100K dataset?",
+        "relevant_pages": [1, 5]
+    },
+    {
+        "question": "How were the videos in BDD100K collected?",
+        "relevant_pages": [3]
+    },
+    {
+        "question": "What are the two types of drivable areas in BDD100K?",
+        "relevant_pages": [4, 12]
+    },
+    {
+        "question": "Why is lane marking detection important for autonomous driving?",
+        "relevant_pages": [4]
+    },
+    {
+        "question": "What are the two lane marking direction attributes?",
+        "relevant_pages": [4, 12]
+    },
+    {
+        "question": "What are the two lane marking continuity attributes?",
+        "relevant_pages": [4, 12]
+    },
+    {
+        "question": "What driving behaviors are represented in the BDD100K GPS trajectories?",
+        "relevant_pages": [11]
+    },
+    {
+        "question": "What are the weather categories represented in BDD100K?",
+        "relevant_pages": [11]
+    },
+    {
+        "question": "What are the scene categories represented in BDD100K?",
+        "relevant_pages": [3, 11]
+    },
+    {
+        "question": "What are the time-of-day categories represented in BDD100K?",
+        "relevant_pages": [3, 11]
+    },
+    {
+        "question": "What does the semantic instance segmentation distribution reveal about BDD100K?",
+        "relevant_pages": [11, 13]
+    }
+]

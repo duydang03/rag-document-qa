@@ -1,0 +1,17 @@
+[
+  {"question": "What is BDD100K?", "relevant_chunk_ids": [0, 1, 5, 16]},
+  {"question": "How many videos does BDD100K contain?", "relevant_chunk_ids": [1, 5, 17]},
+  {"question": "How many tasks does BDD100K support?", "relevant_chunk_ids": [1, 5, 6]},
+  {"question": "What type of dataset is BDD100K?", "relevant_chunk_ids": [0, 1, 5, 16]},
+  {"question": "What are some sources of diversity in the BDD100K dataset?", "relevant_chunk_ids": [1, 5, 16, 17, 18, 19]},
+  {"question": "How were the videos in BDD100K collected?", "relevant_chunk_ids": [16, 17]},
+  {"question": "What are the two types of drivable areas in BDD100K?", "relevant_chunk_ids": [24, 25]},
+  {"question": "Why is lane marking detection important for autonomous driving?", "relevant_chunk_ids": [22, 73]},
+  {"question": "What are the two lane marking direction attributes?", "relevant_chunk_ids": [23, 73]},
+  {"question": "What are the two lane marking continuity attributes?", "relevant_chunk_ids": [23, 73]},
+  {"question": "What driving behaviors are represented in the BDD100K GPS trajectories?", "relevant_chunk_ids": [77]},
+  {"question": "What are the weather categories represented in BDD100K?", "relevant_chunk_ids": [19, 76]},
+  {"question": "What are the scene categories represented in BDD100K?", "relevant_chunk_ids": [19, 76]},
+  {"question": "What are the time-of-day categories represented in BDD100K?", "relevant_chunk_ids": [76]},
+  {"question": "What does the semantic instance segmentation distribution reveal about BDD100K?", "relevant_chunk_ids": [78, 84]}
+]

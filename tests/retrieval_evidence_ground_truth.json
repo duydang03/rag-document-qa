@@ -1,0 +1,121 @@
+[
+  {
+    "question": "What is BDD100K?",
+    "evidence": [
+      "the largest driving video dataset",
+      "We build BDD100K, a new, diverse, and large-scale dataset"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "How many videos does BDD100K contain?",
+    "evidence": [
+      "largest driving video dataset with 100K videos",
+      "we have 100K driving videos",
+      "over 100K diverse video clips"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "How many tasks does BDD100K support?",
+    "evidence": [
+      "100K videos and 10 tasks",
+      "Our benchmarks are comprised of ten tasks"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What type of dataset is BDD100K?",
+    "evidence": [
+      "A Diverse Driving Dataset",
+      "large-scale diverse driving video dataset"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What are some sources of diversity in the BDD100K dataset?",
+    "evidence": [
+      "geographic, environmental, and weather diversity",
+      "diverse scene types such as city streets",
+      "equal number of day-time and night-time",
+      "To achieve good diversity"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "How were the videos in BDD100K collected?",
+    "evidence": [
+      "crowd-sourcing manner uploaded by tens of thousands of drivers"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What are the two types of drivable areas in BDD100K?",
+    "evidence": [
+      "directly drivable area and alternatively drivable area",
+      "alternatively drivable area is a lane the driver is currently not driving on"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "Why is lane marking detection important for autonomous driving?",
+    "evidence": [
+      "lane marking detection is critical",
+      "direction of a lane marking is also significant for autonomous driving"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What are the two lane marking direction attributes?",
+    "evidence": [
+      "direction (parallel or perpendicular)",
+      "if a lane marking is parallel to the passing car"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What are the two lane marking continuity attributes?",
+    "evidence": [
+      "continuity (full or dashed)"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What driving behaviors are represented in the BDD100K GPS trajectories?",
+    "evidence": [
+      "diverse driving behaviors, like starting, stopping, turning and passing"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What are the weather categories represented in BDD100K?",
+    "evidence": [
+      "clear overcast snowy rainy cloudy foggy",
+      "Clear Partly Cloudy Overcast Rainy Snowy Foggy"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What are the scene categories represented in BDD100K?",
+    "evidence": [
+      "city street tunnel highway residential parking gas station",
+      "Residential Highway City Street Parking Lot Gas Stations Tunnel"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What are the time-of-day categories represented in BDD100K?",
+    "evidence": [
+      "Dawn/ Dusk Daytime Night"
+    ],
+    "match": "any"
+  },
+  {
+    "question": "What does the semantic instance segmentation distribution reveal about BDD100K?",
+    "evidence": [
+      "presents a long-tail effect",
+      "good coverage on rare categories"
+    ],
+    "match": "any"
+  }
+]

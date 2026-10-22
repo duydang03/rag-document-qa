@@ -1,0 +1,141 @@
+[
+    {
+        "question": "What is BDD100K?",
+        "answer": "BDD100K is a large-scale driving video dataset with extensive annotations for heterogeneous tasks.",
+        "keywords": [
+            "BDD100K",
+            "large-scale",
+            "driving video dataset",
+            "heterogeneous tasks"
+        ]
+    },
+    {
+        "question": "How many videos does BDD100K contain?",
+        "answer": "BDD100K contains 100K videos.",
+        "keywords": [
+            "100K videos"
+        ]
+    },
+    {
+        "question": "How many tasks does BDD100K support?",
+        "answer": "BDD100K supports 10 tasks.",
+        "keywords": [
+            "10 tasks"
+        ]
+    },
+    {
+        "question": "What type of dataset is BDD100K?",
+        "answer": "BDD100K is a large-scale diverse driving video dataset.",
+        "keywords": [
+            "large-scale",
+            "diverse",
+            "driving video dataset"
+        ]
+    },
+    {
+        "question": "What are some sources of diversity in the BDD100K dataset?",
+        "answer": "BDD100K has geographic, environmental, and weather diversity.",
+        "keywords": [
+            "geographic",
+            "environmental",
+            "weather"
+        ]
+    },
+    {
+        "question": "How were the videos in BDD100K collected?",
+        "answer": "The videos were collected through a crowdsourcing process and uploaded by tens of thousands of drivers.",
+        "keywords": [
+            "crowdsourcing",
+            "tens of thousands",
+            "drivers"
+        ]
+    },
+    {
+        "question": "What are the two types of drivable areas in BDD100K?",
+        "answer": "BDD100K divides drivable areas into directly drivable areas and alternatively drivable areas.",
+        "keywords": [
+            "directly drivable",
+            "alternatively drivable"
+        ]
+    },
+    {
+        "question": "Why is lane marking detection important for autonomous driving?",
+        "answer": "Lane marking detection is critical for vision-based vehicle localization and trajectory planning.",
+        "keywords": [
+            "lane marking detection",
+            "vehicle localization",
+            "trajectory planning"
+        ]
+    },
+    {
+        "question": "What are the two lane marking direction attributes?",
+        "answer": "The two lane marking direction attributes are parallel and perpendicular.",
+        "keywords": [
+            "parallel",
+            "perpendicular"
+        ]
+    },
+    {
+        "question": "What are the two lane marking continuity attributes?",
+        "answer": "The two lane marking continuity attributes are full and dashed.",
+        "keywords": [
+            "full",
+            "dashed"
+        ]
+    },
+    {
+        "question": "What driving behaviors are represented in the BDD100K GPS trajectories?",
+        "answer": "The GPS trajectories represent driving behaviors such as starting, stopping, turning, and passing.",
+        "keywords": [
+            "starting",
+            "stopping",
+            "turning",
+            "passing"
+        ]
+    },
+    {
+        "question": "What are the weather categories represented in BDD100K?",
+        "answer": "The weather categories include clear, partly cloudy, overcast, rainy, snowy, and foggy conditions.",
+        "keywords": [
+            "clear",
+            "partly cloudy",
+            "overcast",
+            "rainy",
+            "snowy",
+            "foggy"
+        ]
+    },
+    {
+        "question": "What are the scene categories represented in BDD100K?",
+        "answer": "The scene categories include residential, highway, city street, parking lot, gas stations, and tunnel.",
+        "keywords": [
+            "residential",
+            "highway",
+            "city street",
+            "parking lot",
+            "gas stations",
+            "tunnel"
+        ]
+    },
+    {
+        "question": "What are the time-of-day categories represented in BDD100K?",
+        "answer": "The time-of-day categories are dawn/dusk, daytime, and night.",
+        "keywords": [
+            "dawn/dusk",
+            "daytime",
+            "night"
+        ]
+    },
+    {
+        "question": "What does the semantic instance segmentation distribution reveal about BDD100K?",
+        "answer": "The distribution shows good coverage of rare categories such as trailers and trains, many common traffic objects such as persons and cars, and a long-tail effect in the dataset.",
+        "keywords": [
+            "rare categories",
+            "trailer",
+            "train",
+            "persons",
+            "cars",
+            "long-tail"
+        ]
+    }
+]
