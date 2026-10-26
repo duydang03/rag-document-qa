@@ -95,11 +95,6 @@ rag-document-qa/
 ├── frontend/
 │   └── streamlit_app.py
 ├── tests/
-│   ├── test_embedding.py
-│   ├── test_llm.py
-│   ├── test_metadata.py
-│   ├── test_rag.py
-│   └── test_retrieval.py
 ├── data/
 │   └── documents/       # Local PDF documents
 ├── build_vector_db.py
