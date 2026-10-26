@@ -89,7 +89,11 @@ def answer_question(
         metadata = item["metadata"]
         source_name = metadata.get("source", "Unknown source")
         page = metadata.get("page")
-        page_number = page + 1 if isinstance(page, int) else "Unknown"
+
+        try:
+            page_number = int(page) + 1 if page is not None else "Unknown"
+        except (TypeError, ValueError):
+            page_number = "Unknown"
 
         context_parts.append(
             f"Source: {source_name}\n"

@@ -1,15 +1,25 @@
 
+import os
 import sys
 from pathlib import Path
 
-# Xác định thư mục gốc của project
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+# Cấu hình database riêng cho test trước khi import vector_store
+os.environ["CHROMA_PATH"] = str(
+    PROJECT_ROOT / "tests" / ".test_chroma"
+)
+os.environ["CHROMA_COLLECTION"] = "test_documents"
+
 from app.ingestion.embedder import create_embeddings
-from app.retrieval.vector_store import add_documents, search
+from app.retrieval.vector_store import (
+    add_documents,
+    search,
+    reset_collection,
+)
 
 texts = [
     "BDD100K is a large-scale driving dataset.",
@@ -29,7 +39,7 @@ metadata = [
     {"source": "test_embedding.pdf", "page": 1, "chunk_id": 1},
     {"source": "test_embedding.pdf", "page": 1, "chunk_id": 2},
 ]
-
+reset_collection()
 # Lưu vào vector store
 add_documents(texts, embeddings, metadata)
 print("Documents added to the vector store.")

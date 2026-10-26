@@ -1,26 +1,39 @@
+import os
 import uuid
-import chromadb
 from pathlib import Path
+import chromadb
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-client = chromadb.PersistentClient(path=str(PROJECT_ROOT / "data" / "chroma"))
 
+CHROMA_PATH = os.getenv(
+    "CHROMA_PATH",
+    str(PROJECT_ROOT / "data" / "chroma")
+)
+
+COLLECTION_NAME = os.getenv(
+    "CHROMA_COLLECTION",
+    "documents"
+)
+
+client = chromadb.PersistentClient(path=CHROMA_PATH)
 
 collection = client.get_or_create_collection(
-    name="documents"
+    name=COLLECTION_NAME
 )
+
 
 def reset_collection():
     global collection
 
     try:
-        client.delete_collection(name="documents")
+        client.delete_collection(name=COLLECTION_NAME)
     except Exception:
         pass
 
     collection = client.get_or_create_collection(
-        name="documents"
+        name=COLLECTION_NAME
     )
+
 
 def add_documents(texts, embeddings, metadata):
     ids = [str(uuid.uuid4()) for _ in texts]
