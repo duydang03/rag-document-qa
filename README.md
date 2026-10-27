@@ -38,8 +38,8 @@ The project combines semantic retrieval, vector search, LLM-based answer generat
                         │
                         ▼
              ┌──────────────────────┐
-             │   Document Loading    │
-             │   & Chunking          │
+             │   Document Loading   │
+             │   & Chunking         │
              └──────────┬───────────┘
                         │
                         ▼
@@ -174,45 +174,63 @@ Open the local URL displayed in the terminal, usually `http://localhost:8501`.
 
 ## 🧪 Evaluation
 
-The project includes scripts for testing embeddings, LLM integration, metadata, retrieval, and the end-to-end RAG pipeline.
+The RAG pipeline was evaluated through retrieval benchmarking, automated answer-quality tests, and end-to-end regression tests.
 
-### Retrieval: Chunking Strategy
+### 1. Retrieval Benchmark
 
-Several chunk-size and overlap configurations were evaluated to investigate their impact on retrieval performance.
+Different chunk sizes and overlaps were evaluated to measure retrieval performance.
 
-| Chunk Size / Overlap | Chunks | Hit@1 | Hit@3 | Hit@5 | MRR@3 | Keyword Coverage |
+| Chunk Size / Overlap | Number of Chunks | Hit@1 | Hit@3 | Hit@5 | MRR@3 | Keyword Coverage |
 |---|---:|---:|---:|---:|---:|---:|
-| 500 / 100 | 132 | 0% | 80% | 100% | 0.3833 | 95.00% |
-| 750 / 150 | 92 | 20% | 100% | 100% | 0.6000 | **100.00%** |
-| **800 / 200** | **90** | **80%** | **100%** | **100%** | **0.9000** | 95.00% |
+| 500 / 100 | 132 | 0% | 80% | 100% | 0.3833 | 95% |
+| 750 / 150 | 92 | 20% | 100% | 100% | 0.6000 | 100% |
+| 800 / 200 | 90 | 80% | 100% | 100% | 0.9000 | 95% |
 | 1000 / 200 | 69 | 40% | 100% | 100% | 0.7000 | 73.33% |
 
-**Key observations**
+These results are from the recorded chunking benchmark. They represent a separate experiment from the latest automated quality and end-to-end test runs.
 
-- **800 / 200** achieved the strongest retrieval ranking results in the reported evaluation, with an 80% Hit@1 and an MRR@3 of 0.90.
-- **750 / 150** achieved the highest keyword coverage at 100%.
-- **1000 / 200** produced fewer chunks but lower Hit@1 and keyword coverage than 800 / 200.
+### 2. Automated RAG Quality Evaluation
 
-Based on these results, 800 / 200 is a promising configuration when prioritizing retrieval ranking performance, while 750 / 150 may be preferable when keyword coverage is the primary consideration.
+The automated quality evaluation checks answerability, abstention behavior, and citation handling.
 
-### Answer Quality
-
-The reported Faithfulness and Correctness scores were both 100% across the evaluated chunking configurations.
-
-These scores should be interpreted in the context of the test dataset, evaluation criteria, and scoring methodology.
-
-### End-to-End RAG Evaluation
-
-In the current local evaluation, the configuration with `top_k = 8` achieved the following results across three runs:
-
-| Metric | Reported Result |
+| Metric | Latest Result |
 |---|---:|
-| PASS results | 26/26 |
-| Answerable cases | 15/15 |
-| Abstention cases | 11/11 |
-| Average response latency | Approximately 2.005 seconds |
+| Total test cases | 26 |
+| Passed | 26 / 26 |
+| Review required | 0 |
+| Failed | 0 |
+| Errors | 0 |
+| Answerable pass rate | 100% |
+| Abstention rate | 100% |
+| Average latency | 2.15 seconds |
 
-These results represent the project's current evaluation setup. They do not guarantee equivalent performance on arbitrary documents or unseen questions.
+**Result:** All 26 test cases passed in the latest reported quality evaluation.
+
+### 3. End-to-End Regression Testing
+
+The end-to-end evaluation tests the complete question-answering pipeline.
+
+| Metric | Latest Result |
+|---|---:|
+| Total questions | 15 |
+| Successful runs | 15 / 15 |
+| Errors | 0 |
+| Answered questions | 15 |
+| Abstained questions | 0 |
+| Missing citations | 0 |
+| Citation mismatches | 0 |
+| Average latency | 2.335 seconds |
+
+**Result:** All 15 end-to-end test runs completed successfully, with no reported errors, missing citations, or citation mismatches.
+
+### 4. Evaluation Notes
+
+- Retrieval benchmarking measures how effectively relevant document chunks are retrieved.
+- Quality evaluation measures the behavior of the RAG pipeline against its automated test cases.
+- End-to-end testing checks whether the complete pipeline runs successfully and returns answers with the expected citation format.
+- The reported results apply to the tested datasets and test cases; they do not guarantee perfect performance on every document or question.
+- Latency may vary depending on the document, query, embedding model, API response time, and runtime environment.
+
 
 ## 🔒 Security Considerations
 
