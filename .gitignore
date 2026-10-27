@@ -15,7 +15,8 @@ venv/
 
 # IDE
 .vscode/
-
+# Test-only Chroma database
+tests/.test_chroma/
 # Generated vector database
 data/chroma/
 data/documents/
