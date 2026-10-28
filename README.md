@@ -172,6 +172,33 @@ streamlit run frontend/streamlit_app.py
 
 Open the local URL displayed in the terminal, usually `http://localhost:8501`.
 
+## Demo
+
+Explore how RAG Document QA turns PDF documents into searchable knowledge.
+
+### Application Preview
+
+![RAG Document QA — PDF question answering with source citations](docs/images/streamlit-demo.png)
+
+*Ask questions about a selected PDF, receive context-grounded answers, and expand **Show Sources** to inspect the retrieved passages and page references.*
+
+### How It Works
+
+1. **Upload or select a PDF** — Choose a document to query.
+2. **Ask a question** — Enter a natural-language question in the chat interface.
+3. **Retrieve relevant context** — Hybrid retrieval combines vector search and BM25 ranking.
+4. **Generate a grounded answer** — The LLM answers using the retrieved document context.
+5. **Verify the sources** — Expand *Show Sources* to review source documents, page numbers, and retrieved text excerpts.
+
+### Key Capabilities
+
+- PDF ingestion and document indexing
+- Hybrid retrieval with Reciprocal Rank Fusion (RRF)
+- Query rewriting for retrieval
+- Source-aware answers with page references
+- Abstention when the available context does not support an answer
+- Automated quality and end-to-end regression evaluation
+
 ## 🧪 Evaluation
 
 The RAG pipeline was evaluated through retrieval benchmarking, automated answer-quality tests, and end-to-end regression tests.
@@ -251,7 +278,12 @@ The end-to-end evaluation tests the complete question-answering pipeline.
 
 ## 👨‍💻 Author
 
-Developed as a hands-on project exploring Retrieval-Augmented Generation, semantic search, vector databases, and document-grounded question answering.
+**Phạm Đăng Duy**
+
+- LinkedIn: [pham-dang-duy](https://www.linkedin.com/in/pham-dang-duy)
+- GitHub: [duydang03](https://github.com/duydang03)
+
+This project demonstrates practical experience in retrieval-augmented generation (RAG), document ingestion, hybrid retrieval, source citation, and automated evaluation.
 
 ---
 
