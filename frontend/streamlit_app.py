@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-
+import re
 import streamlit as st
 
 
@@ -51,14 +51,92 @@ def is_refusal_answer(answer):
     return any(phrase in normalized_answer for phrase in REFUSAL_PHRASES)
 
 
+CITATION_RE = re.compile(r"\[Source:[^\]]*\]")
+
+
+def strip_citations(text):
+    return CITATION_RE.sub("", text)
+
+
+def compact_citations(text):
+    """[Source: core.pdf, Page: 1; Source: core.pdf, Page: 3] -> [p.1, 3]. Chỉ để hiển thị."""
+    def repl(match):
+        numbers = []
+        for group in re.findall(r"Pages?:\s*([\d,\u2013\- ]+)", match.group(0)):
+            numbers.extend(re.findall(r"\d+(?:\u2013\d+)?", group))
+        return "[p." + ", ".join(dict.fromkeys(numbers)) + "]" if numbers else match.group(0)
+
+    return CITATION_RE.sub(repl, text)
+
+
+def order_by_citation(sources, answer):
+    cited = list(dict.fromkeys(
+        int(page) for page in re.findall(r"Pages?:\s*(\d+)", answer)
+    ))
+    return sorted(
+        sources,
+        key=lambda s: cited.index(s["page"]) if s["page"] in cited else len(cited),
+    )
+
+
+def focus_snippet(text, query, max_chars=360):
+    """Chọn câu liên quan nhất với câu hỏi và câu trả lời, thay vì lấy đầu chunk."""
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) <= max_chars:
+        return text
+
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    query_tokens = {t for t in re.findall(r"\w+", query.lower()) if len(t) > 3}
+    if not query_tokens:
+        return text[:max_chars] + " …"
+
+    overlap = [
+        len(query_tokens & set(re.findall(r"\w+", s.lower())))
+        for s in sentences
+    ]
+    best = max(range(len(sentences)), key=lambda i: (overlap[i], -i))
+
+    lo = hi = best
+    size = len(sentences[best])
+    while size < max_chars:
+        if hi + 1 < len(sentences) and size + len(sentences[hi + 1]) <= max_chars:
+            hi += 1
+            size += len(sentences[hi]) + 1
+        elif lo > 0 and size + len(sentences[lo - 1]) <= max_chars:
+            lo -= 1
+            size += len(sentences[lo]) + 1
+        else:
+            break
+
+    return (
+        ("… " if lo > 0 else "")
+        + " ".join(sentences[lo:hi + 1])
+        + (" …" if hi < len(sentences) - 1 else "")
+    )
+
+def cited_page_numbers(answer):
+    """Các trang được dẫn trong câu trả lời: 'Page: 3', 'Pages: 3, 5', 'Pages: 3–4'."""
+    pages = set()
+    for group in re.findall(r"Pages?:\s*([\d,\u2013\- ]+)", answer):
+        for part in re.split(r"[,\s]+", group.strip()):
+            match = re.fullmatch(r"(\d+)[\u2013\-](\d+)", part)
+            if match:
+                low, high = int(match.group(1)), int(match.group(2))
+                if low <= high <= low + 20:
+                    pages.update(range(low, high + 1))
+            elif part.isdigit():
+                pages.add(int(part))
+    return pages
+
 def render_sources(sources):
     if not sources:
         return
 
-    st.markdown("**Sources:**")
-
-    for source in sources:
-        st.write(f"📄 {source['source']} — Page {source['page']}")
+    with st.expander(f"Sources ({len(sources)})"):
+        for index, source in enumerate(sources, start=1):
+            st.markdown(f"**{index}. 📄 {source['source']} · p.{source['page']}**")
+            if source.get("snippet"):
+                st.markdown(f"> {source['snippet']}")
 
 
 # ============================================================
@@ -180,7 +258,7 @@ if st.session_state.current_document:
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.write(message["content"])
+        st.write(compact_citations(message["content"]))
 
         if message.get("document"):
             st.caption(f"Document: {message['document']}")
@@ -280,10 +358,26 @@ if prompt:
                         st.error(f"Could not answer the question: {e}")
                         st.stop()
 
-                st.write(answer)
-                st.caption(f"Document used: {active_document}")
+                st.write(compact_citations(answer))
 
-                sources_to_save = [] if is_refusal_answer(answer) else sources
+                if is_refusal_answer(answer):
+                    sources_to_save = []
+                else:
+                    ordered = order_by_citation(sources, answer)
+                    cited = cited_page_numbers(answer)
+                    # Chỉ hiện các trang được trích dẫn; nếu mô hình không dẫn trang nào thì hiện 3 nguồn đầu.
+                    shown = [s for s in ordered if s["page"] in cited] or ordered[:3]
+
+                    focus_query = f"{question} {strip_citations(answer)}"
+                    sources_to_save = [
+                        {
+                            "source": s["source"],
+                            "page": s["page"],
+                            "snippet": focus_snippet(s.get("content", ""), focus_query),
+                        }
+                        for s in shown
+                    ]
+
                 render_sources(sources_to_save)
 
             st.session_state.messages.append({

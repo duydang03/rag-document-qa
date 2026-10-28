@@ -82,8 +82,7 @@ def answer_question(
         return "I don't know based on the provided document.", []
 
     context_parts = []
-    sources = []
-    seen = set()
+    sources_by_key = {}
 
     for item in results:
         metadata = item["metadata"]
@@ -101,11 +100,18 @@ def answer_question(
             f"Content:\n{item['document']}"
         )
 
-        source_key = (source_name, page_number)
-        if source_key not in seen:
-            sources.append({"source": source_name, "page": page_number})
-            seen.add(source_key)
+        key = (source_name, page_number)
 
+        if key in sources_by_key:
+            sources_by_key[key]["content"] += "\n\n" + item["document"]
+        else:
+            sources_by_key[key] = {
+                "source": source_name,
+                "page": page_number,
+                "content": item["document"],
+            }
+
+    sources = list(sources_by_key.values())
     context = "\n\n---\n\n".join(context_parts)
 
     # if DEBUG:
