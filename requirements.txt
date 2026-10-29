@@ -9,3 +9,4 @@ streamlit
 fastapi
 uvicorn
 sentence-transformers
+rank-bm25
