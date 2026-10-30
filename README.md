@@ -6,28 +6,47 @@ Upload PDF documents, ask questions about their content, and receive answers bas
 
 The project combines semantic retrieval, vector search, LLM-based answer generation, document management, and evaluation scripts in an interactive Streamlit application.
 
-## ✨ Features
+## ✨ Key Features
 
-- **📑 PDF Ingestion** — Load, process, and index PDF documents.
-- **💬 Interactive Q&A** — Ask questions and follow up through a chat interface with persistent session history.
-- **🔎 Semantic Retrieval** — Retrieve relevant document chunks using vector representations.
-- **📚 Source References** — Display supporting document names and page numbers when available.
-- **🛡️ Context-Aware Responses** — Abstain from answering when the retrieved context does not provide sufficient information.
-- **🗂️ Document Management** — Select, inspect, and delete indexed documents.
-- **📊 Evaluation** — Evaluate retrieval performance, answer quality, abstention behavior, and response latency.
+- PDF document ingestion and text extraction
+- Document chunking and embedding generation
+- Vector similarity search with ChromaDB
+- Hybrid retrieval combining vector search and BM25
+- Reciprocal Rank Fusion (RRF) for result ranking
+- Cross-Encoder reranking
+- Query transformation and expansion
+- LLM-powered answer generation
+- Source references with page numbers
+- Support for document uploads through the interface
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| Python | Core application logic |
-| Streamlit | Interactive web interface |
-| LangChain document loaders | PDF loading and document processing |
-| ChromaDB | Vector storage and similarity search |
-| Embedding models | Convert text into vector representations |
-| OpenAI API | LLM-based answer generation |
-| Retrieval and reranking components | Improve context selection |
-| Git & GitHub | Version control and project hosting |
+- **Language:** Python
+- **Frontend:** Streamlit
+- **LLM:** OpenAI API
+- **Vector Database:** ChromaDB
+- **Embeddings:** Sentence Transformers
+- **Retrieval:** Vector Search, BM25, Hybrid Search
+- **Reranking:** Cross-Encoder
+- **Document Processing:** PyMuPDF / LangChain
+
+## 🏗️ RAG Architecture
+
+1. **Document Ingestion:** Load and extract text from PDF files.
+2. **Chunking:** Split extracted text into smaller chunks.
+3. **Embedding:** Convert text chunks into vector representations.
+4. **Retrieval:** Retrieve relevant chunks using vector search and BM25.
+5. **Ranking:** Combine retrieval results using Reciprocal Rank Fusion and rerank candidates with a Cross-Encoder.
+6. **Generation:** Use the retrieved context to generate answers with an LLM.
+7. **Citation:** Display source documents and page references.
+
+
+## ⚠️ Limitations
+
+- Answer quality depends on the content and structure of uploaded documents.
+- Retrieval may not always identify every relevant detail, especially information embedded in figures or tables.
+- LLM-generated answers should be verified against the cited source pages.
+
 
 ## 🏗️ System Architecture
 
@@ -175,6 +194,10 @@ Open the local URL displayed in the terminal, usually `http://localhost:8501`.
 ## Demo
 
 Explore how RAG Document QA turns PDF documents into searchable knowledge.
+
+### 🚀 Live Demo
+
+[Try the application](https://rag-document-w1129pdd.streamlit.app/)
 
 ### Application Preview
 
